@@ -24,6 +24,8 @@ Notable PRs that I've picked include:
   - Stores all Linear and Conv weights as bfloat16 and disables `requires_grad` unconditionally at model load, halving resident weight memory for all users on all hardware.
 - [#11: Fix auto-VRAM OOM on first run](https://github.com/nikopueringer/CorridorKey2.0/pull/11) by **[levi-lumin](https://github.com/levi-lumin)**
   - Replaces the fixed 0.3 GB VRAM margin with `max(1.5 GB, 5 % of total VRAM)`, samples the budget twice with a one-second gap to avoid transient spikes, reports the remaining margin in the log line, and adds an automatic OOM retry (CUDA only) that falls back to a smaller chunk rather than crashing.
+- [#23: macOS SSL certificate fallback for weight downloads](https://github.com/nikopueringer/CorridorKey2.0/pull/23) by **[philipmiesbauer](https://github.com/philipmiesbauer)**
+  - `scripts/download_weights.py` now falls back to `certifi`'s CA bundle when the system CA file is absent (common with macOS `Python.framework` builds), preventing `CERTIFICATE_VERIFY_FAILED` errors during the initial weight download. The device-selection parts of this PR were superseded by our existing implementation.
 
 Locally tested using a short 1080p video from a cheap USB webcam (featuring me talking in front of an unevently-lit green screen) and a manually edited first-frame alpha hint:
 
